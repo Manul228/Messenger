@@ -7,6 +7,9 @@ import com.example.messenger.data.remote.request.UserRequestObject
 import com.example.messenger.data.vo.*
 import io.reactivex.Observable
 import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
 interface MessengerApiService {
@@ -56,5 +59,17 @@ interface MessengerApiService {
 
     companion object Factory {
         private var service: MessengerApiService? = null
+
+        fun getInstance(): MessengerApiService {
+            if (service == null) {
+                val retrofit = Retrofit.Builder()
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl("{AWS_URL}")
+                    .build()
+                service = retrofit.create(MessengerApiService::class.java)
+            }
+            return service as MessengerApiService
+        }
     }
 }
