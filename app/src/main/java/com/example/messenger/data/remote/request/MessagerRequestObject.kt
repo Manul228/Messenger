@@ -1,6 +1,6 @@
 package com.example.messenger.data.remote.request
 
-data class MessageRequestObject(
+data class MessagerRequestObject(
     val recipientId: Long,
     val message: String
 )

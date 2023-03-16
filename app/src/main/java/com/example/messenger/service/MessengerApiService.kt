@@ -1,7 +1,7 @@
 package com.example.messenger.service
 
 import com.example.messenger.data.remote.request.LoginRequestObject
-import com.example.messenger.data.remote.request.MessageRequestObject
+import com.example.messenger.data.remote.request.MessagerRequestObject
 import com.example.messenger.data.remote.request.StatusUpdateRequestObject
 import com.example.messenger.data.remote.request.UserRequestObject
 import com.example.messenger.data.vo.*
@@ -39,7 +39,7 @@ interface MessengerApiService {
 
     @POST("messages")
     fun createMessage(
-        @Body messageRequestObject: MessageRequestObject,
+        @Body messageRequestObject: MessagerRequestObject,
         @Header("Authorization") authorization: String
     ): Observable<MessageVO>
 
@@ -53,4 +53,8 @@ interface MessengerApiService {
         @Path("conversationId") conversationId: Long,
         @Header("Authorization") authorization: String
     ): Observable<ConversationVO>
+
+    companion object Factory {
+        private var service: MessengerApiService? = null
+    }
 }
