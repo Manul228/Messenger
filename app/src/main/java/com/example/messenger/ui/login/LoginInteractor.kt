@@ -9,6 +9,6 @@ interface LoginInteractor : AuthInteractor {
         fun onDetailsRetrievalError()
     }
 
-    fun login(username: String, listener: AuthInteractor.onAuthFinishedListener)
+    fun login(username: String, password: String, listener: AuthInteractor.onAuthFinishedListener)
     fun retrieveDetails(preferences: AppPreferences, listener: OnDetailsRetrievalFinishedListener)
 }

@@ -2,12 +2,16 @@ package com.example.messenger.ui.login
 
 import com.example.messenger.data.local.AppPreferences
 import com.example.messenger.data.remote.request.LoginRequestObject
+import com.example.messenger.data.vo.UserVO
 import com.example.messenger.service.MessengerApiService
 import com.example.messenger.ui.auth.AuthInteractor
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class LoginInteractorImpl : LoginInteractor {
+
+    override lateinit var userDetails: UserVO
+
     override lateinit var accessToken: String
     override lateinit var submittedUsername: String
     override lateinit var submittedPassword: String
@@ -33,12 +37,28 @@ class LoginInteractorImpl : LoginInteractor {
                         } else {
                             listener.onAuthError()
                         }
-                    }, {error ->
+                    }, { error ->
                         listener.onAuthError()
                         error.printStackTrace()
                 })
             }
         }
+    }
+
+    override fun retrieveDetails(
+        preferences: AppPreferences,
+        listener: LoginInteractor.OnDetailsRetrievalFinishedListener
+    ) {
+        service.echoDetails(preferences.accessToken as String)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe( { res ->
+                userDetails = res
+                listener.onDetailsRetrievalSuccess()},
+                { error ->
+                    listener.onDetailsRetrievalSuccess()
+                    error.printStackTrace()
+            })
     }
 
     override fun persistAccessToken(preferences: AppPreferences) {
