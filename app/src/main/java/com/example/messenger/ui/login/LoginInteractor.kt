@@ -4,7 +4,6 @@ import com.example.messenger.data.local.AppPreferences
 import com.example.messenger.ui.auth.AuthInteractor
 
 interface LoginInteractor : AuthInteractor {
-
     interface OnDetailsRetrievalFinishedListener {
         fun onDetailsRetrievalSuccess()
         fun onDetailsRetrievalError()
