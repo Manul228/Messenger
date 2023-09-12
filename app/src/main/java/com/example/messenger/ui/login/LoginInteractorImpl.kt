@@ -1,5 +1,6 @@
 package com.example.messenger.ui.login
 
+import android.annotation.SuppressLint
 import com.example.messenger.data.local.AppPreferences
 import com.example.messenger.data.remote.request.LoginRequestObject
 import com.example.messenger.data.vo.UserVO
@@ -18,6 +19,7 @@ class LoginInteractorImpl : LoginInteractor {
 
     private val service: MessengerApiService = MessengerApiService.getInstance()
 
+    @SuppressLint("CheckResult")
     override fun login(username: String, password: String, listener: AuthInteractor.onAuthFinishedListener) {
         when {
             username.isBlank() -> listener.onUsernameError()
@@ -45,6 +47,7 @@ class LoginInteractorImpl : LoginInteractor {
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun retrieveDetails(
         preferences: AppPreferences,
         listener: LoginInteractor.OnDetailsRetrievalFinishedListener
