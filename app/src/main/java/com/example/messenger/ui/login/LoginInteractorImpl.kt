@@ -12,18 +12,23 @@ import io.reactivex.schedulers.Schedulers
 class LoginInteractorImpl : LoginInteractor {
 
     override lateinit var userDetails: UserVO
-
     override lateinit var accessToken: String
     override lateinit var submittedUsername: String
     override lateinit var submittedPassword: String
 
+
     private val service: MessengerApiService = MessengerApiService.getInstance()
 
     @SuppressLint("CheckResult")
-    override fun login(username: String, password: String, listener: AuthInteractor.onAuthFinishedListener) {
+    override fun login(
+        username: String,
+        password: String,
+        listener: AuthInteractor.onAuthFinishedListener
+    ) {
         when {
             username.isBlank() -> listener.onUsernameError()
             password.isBlank() -> listener.onPasswordError()
+
             else -> {
                 submittedUsername = username
                 submittedPassword = password
@@ -42,7 +47,7 @@ class LoginInteractorImpl : LoginInteractor {
                     }, { error ->
                         listener.onAuthError()
                         error.printStackTrace()
-                })
+                    })
             }
         }
     }
@@ -55,13 +60,16 @@ class LoginInteractorImpl : LoginInteractor {
         service.echoDetails(preferences.accessToken as String)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe( { res ->
-                userDetails = res
-                listener.onDetailsRetrievalSuccess()},
-                { error ->
+            .subscribe(
+                { res ->
+                    userDetails = res
                     listener.onDetailsRetrievalSuccess()
+                },
+                { error ->
+                    listener.onDetailsRetrievalError()
                     error.printStackTrace()
-            })
+                }
+            )
     }
 
     override fun persistAccessToken(preferences: AppPreferences) {
